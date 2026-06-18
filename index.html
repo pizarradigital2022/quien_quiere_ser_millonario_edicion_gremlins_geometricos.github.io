@@ -66,10 +66,10 @@
             background-color: rgba(255, 7, 58, 0.05);
         }
 
-        /* Espacios para imágenes solicitados */
+        /* CORRECCIÓN: Contenedor con altura mejorada y control estricto de desbordamiento */
         .espacio-imagen {
             width: 100%;
-            height: 150px;
+            height: 250px; /* Aumentado de 150px a 250px para que se vean más grandecitas */
             background-color: #000;
             border: 2px dashed #444;
             display: flex;
@@ -79,6 +79,15 @@
             margin: 15px 0;
             border-radius: 6px;
             font-size: 0.9rem;
+            overflow: hidden; /* Evita que las imágenes se salgan del recuadro */
+        }
+
+        /* NUEVO: Asegura que las imágenes no se desborden ni se deformen */
+        .espacio-imagen img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain; /* Ajusta la imagen proporcionalmente sin recortarla */
+            display: block;
         }
 
         .formulario-inicio {
@@ -379,7 +388,7 @@
             { q: "Si el diámetro de una circunferencia mide 14 cm, ¿cuánto mide su radio?", a: ["7 cm", "28 cm", "21 cm", "14 cm"], c: "7 cm" },
             { q: "Un triángulo escaleno es aquel que tiene...", a: ["Sus tres lados desiguales", "Dos lados iguales", "Tres lados iguales", "Un ángulo de 90 grados"], c: "Sus tres lados desiguales" },
             { q: "¿Cómo se llama el polígono regular de 8 lados?", a: ["Octógono regular", "Hexágono", "Decágono", "Eneágono"], c: "Octógono regular" },
-            { q: "¿Cuál es el área de un triángulo de base 10 cm y altura 6 cm?", a: ["30 cm²", "60 cm²", "16 cm²", "20 cm²"], c: "30 cm²" },
+            { q: "Cuál es el área de un triángulo de base 10 cm y altura 6 cm?", a: ["30 cm²", "60 cm²", "16 cm²", "20 cm²"], c: "30 cm²" },
             { q: "Los ángulos de un triángulo acutángulo son todos...", a: ["Agudos", "Obtosos", "Rectos", "Llanos"], c: "Agudos" },
             { q: "¿Qué elemento une dos vértices no consecutivos de un polígono?", a: ["Diagonal", "Lado", "Apotema", "Cuerda"], c: "Diagonal" },
             { q: "Si un polígono regular tiene todos sus lados iguales, ¿cómo son sus ángulos?", a: ["Todos iguales", "Todos diferentes", "Todos rectos", "Unos agudos y otros obtusos"], c: "Todos iguales" },
@@ -643,16 +652,15 @@
         let mensajeNode = document.getElementById("mensaje-final");
         let imagenNode = document.getElementById("imagen-resultado");
 
+        // CORRECCIÓN: Inyección limpia de las etiquetas img correspondientes controladas por CSS
         if (haGanado) {
             tituloNode.innerText = "¡VICTORIA ABSOLUTA!";
             mensajeNode.className = "resultado-mensaje ganado";
-            // Aquí inyectas la imagen de Victoria
-            imagenNode.innerHTML = "[Espacio para imagen final: Stripe derrotado y el tierno Gizmo celebrando tu victoria]";
+            imagenNode.innerHTML = `<img src="./resources/gizmo_victoria.png" alt="Gizmo celebra la victoria">`;
         } else {
             tituloNode.innerText = "¡PARTIDA PERDIDA!";
             mensajeNode.className = "resultado-mensaje perdido";
-            // Aquí inyectas la imagen de Derrota
-            imagenNode.innerHTML = "[Espacio para imagen final: Los Gremlins gamberros destrozando el plató y burlándose de ti]";
+            imagenNode.innerHTML = `<img src="./resources/stripe_derrota.png" alt="Stripe se burla de tu derrota">`;
         }
         
         mensajeNode.innerHTML = mensajeHTML;
