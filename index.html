@@ -324,9 +324,7 @@
     <div id="pantalla-resultados" class="pantalla">
         <h1 id="titulo-resultado">Fin de la Partida</h1>
         
-        <div class="espacio-imagen">
-            [Espacio para imagen final: Gremlins destrozando el plató o Stripe derrotado]
-        </div>
+        <div id="imagen-resultado" class="espacio-imagen"></div>
 
         <div id="mensaje-final" class="resultado-mensaje"></div>
 
@@ -366,7 +364,7 @@
             { q: "La línea recta que une el centro de una circunferencia con cualquier punto de ella es el...", a: ["Radio", "Diámetro", "Cuerda", "Tangente"], c: "Radio" },
             { q: "¿Qué figura geométrica tiene 4 lados de igual longitud y ángulos de 90 grados?", a: ["Cuadrado", "Rombo", "Rectángulo", "Trapecio"], c: "Cuadrado" },
             { q: "¿Cuál es el polígono con menor número de lados?", a: ["Triángulo", "Cuadrado", "Ángulo", "Segmento"], c: "Triángulo" },
-            { q: "Si un ángulo mide 120°, se clasifica como ángulo...", a: ["Obtuso", "Agudo", "Recto", "Llano"], c: "Obtuso" },
+            { q: "Si un ángulo mide 120°, se clasificifica como ángulo...", a: ["Obtuso", "Agudo", "Recto", "Llano"], c: "Obtuso" },
             { q: "¿Cómo se llaman las líneas rectas que nunca se cruzan por mucho que se prolonguen?", a: ["Paralelas", "Perpendiculares", "Secantes", "Coincidentes"], c: "Paralelas" },
             { q: "¿Cuánto suman los ángulos interiores de cualquier triángulo?", a: ["180°", "90°", "360°", "270°"], c: "180°" },
             { q: "El punto donde se cortan dos lados de un polígono se llama...", a: ["Vértice", "Diagonal", "Centro", "Arista"], c: "Vértice" },
@@ -403,7 +401,7 @@
             { q: "Si un triángulo tiene un ángulo de 30° y otro de 60°, ¿qué tipo de triángulo es según sus ángulos?", a: ["Rectángulo", "Acutángulo", "Obtusángulo", "Equilátero"], c: "Rectángulo" },
             { q: "¿Cuál es el área de un romboide de base 8 cm y altura 5 cm?", a: ["40 cm²", "20 cm²", "26 cm²", "13 cm²"], c: "40 cm²" },
             { q: "¿Qué propiedad cumplen los ángulos opuestos por el vértice?", a: ["Son iguales", "Suman 180°", "Suman 90°", "Son complementarios"], c: "Son iguales" },
-            { q: "Para calcular el área de un polígono regular se utiliza la fórmula...", a: "(Perímetro * apotema) / 2", c: "(Perímetro * apotema) / 2", a: ["(Perímetro * apotema) / 2", "Base * altura", "Lado * lado", "(Base mayor + base menor) * altura"] },
+            { q: "Para calcular el área de un polígono regular se utiliza la fórmula...", a: ["(Perímetro * apotema) / 2", "Base * altura", "Lado * lado", "(Base mayor + base menor) * altura"], c: "(Perímetro * apotema) / 2" },
             { q: "Si un ángulo inscrito en una circunferencia abarca un diámetro, ¿cuánto mide ese ángulo?", a: ["90°", "180°", "45°", "Depende de la circunferencia"], c: "90°" },
             { q: "¿Cuál es el área de un trapecio de bases 6 cm y 4 cm, y altura 3 cm?", a: ["15 cm²", "30 cm²", "24 cm²", "12 cm²"], c: "15 cm²" },
             { q: "Si las rectas r y s son paralelas, y s es perpendicular a t. ¿Cómo son r y t?", a: ["Perpendiculares", "Paralelas", "Secantes no perpendiculares", "Coincidentes"], c: "Perpendiculares" },
@@ -423,17 +421,17 @@
     // Comodines del jugador
     let comodin50Usado = false;
     let comodin25Usado = false;
-    let comodinUsadoEnPreguntaActual = false; // Restricción: un comodín por pregunta
+    let comodinUsadoEnPreguntaActual = false; 
 
     // Tiempos y Relojes
     let tiempoMaximoGlobalMinutos = 15;
     let tiempoGlobalRestanteSegundos = 0;
-    let tiempoPreguntaRestanteSegundos = 150; // 2 minutos y medio = 150 seg
+    let tiempoPreguntaRestanteSegundos = 150; 
 
     let intervaloGlobal;
     let intervaloPregunta;
     
-    let tiempoInicioJuego; // Para medir tiempo total invertido exacto
+    let tiempoInicioJuego; 
 
     // --- LÓGICA DE CONTROL DE PANTALLAS ---
     function cambiarPantalla(idPantalla) {
@@ -451,7 +449,6 @@
         nombreJugador = inputNombre;
         tiempoMaximoGlobalMinutos = parseInt(document.getElementById("tiempo-maximo").value);
 
-        // Inicializar variables del juego
         preguntasSeleccionadas = [];
         indicePreguntaActual = 0;
         puntos = 0;
@@ -462,31 +459,23 @@
         document.getElementById("comodin-50").disabled = false;
         document.getElementById("comodin-25").disabled = false;
 
-        // Seleccionar 15 preguntas sin repetir basadas en la dificultad incremental solicitado
-        // 5 fáciles, 5 medias, 5 difíciles
         preguntasSeleccionadas.push(...obtenerPreguntasAleatorias(bancoPreguntas.facil, 5));
         preguntasSeleccionadas.push(...obtenerPreguntasAleatorias(bancoPreguntas.medio, 5));
         preguntasSeleccionadas.push(...obtenerPreguntasAleatorias(bancoPreguntas.dificil, 5));
 
-        // Tiempos
         tiempoGlobalRestanteSegundos = tiempoMaximoGlobalMinutos * 60;
         tiempoInicioJuego = new Date();
 
-        // Actualizar datos estáticos en interfaz
         document.getElementById("txt-nombre").innerText = nombreJugador;
         
-        // Lanzar relojes
         lanzarCronometroGlobal();
         
-        // Cargar primera pregunta
         cambiarPantalla("pantalla-juego");
         cargarPregunta();
     }
 
-    // Función auxiliar para mezclar y extraer N preguntas únicas
     function obtenerPreguntasAleatorias(lista, cantidad) {
         let copia = [...lista];
-        // Algoritmo de Fisher-Yates para barajar el banco
         for (let i = copia.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [copia[i], copia[j]] = [copia[j], copia[i]];
@@ -498,13 +487,11 @@
     function cargarPregunta() {
         comodinUsadoEnPreguntaActual = false;
         
-        // Habilitar o deshabilitar botones de comodines visualmente
         document.getElementById("comodin-50").disabled = comodin50Usado;
         document.getElementById("comodin-25").disabled = comodin25Usado;
 
         let datosPregunta = preguntasSeleccionadas[indicePreguntaActual];
 
-        // Definir nivel visualmente
         let textoNivel = "Fácil";
         if (indicePreguntaActual >= 5 && indicePreguntaActual < 10) textoNivel = "Medio";
         if (indicePreguntaActual >= 10) textoNivel = "Difícil";
@@ -514,22 +501,17 @@
         document.getElementById("txt-puntos-actuales").innerText = puntos;
         document.getElementById("bloque-pregunta").innerText = datosPregunta.q;
 
-        // Generar y barajar opciones de respuestas
         let opciones = [...datosPregunta.a];
-        // Volvemos a barajar las opciones para que la correcta cambie de letra (A, B, C, D)
         opciones.sort(() => Math.random() - 0.5);
 
-        // Renderizar los botones de respuesta
         for (let i = 0; i < 4; i++) {
             let btn = document.getElementById(`btn-opt-${i}`);
             btn.innerText = `${obtenerLetra(i)}) ${opciones[i]}`;
             btn.classList.remove("oculto");
             btn.disabled = false;
-            // Guardamos el valor limpio en un atributo de datos para comprobar luego
             btn.dataset.valor = opciones[i]; 
         }
 
-        // Reiniciar y lanzar temporizador específico de la pregunta (2:30 minutos = 150 segundos)
         tiempoPreguntaRestanteSegundos = 150;
         lanzarCronometroPregunta();
     }
@@ -566,7 +548,6 @@
 
             if (tiempoPreguntaRestanteSegundos <= 0) {
                 clearInterval(intervaloPregunta);
-                // Si agota el tiempo de la pregunta, cuenta como fallo catastrófico e impide continuar.
                 finalizarPartida(false, "¡Demasiado lento! Stripe se aburrió de esperar y te pegó un bocado. Pregunta no contestada a tiempo.");
             }
         }, 1000);
@@ -580,18 +561,16 @@
     }
 
     // --- COMODINES ---
-    // Elimina el 50% de las respuestas incorrectas (es decir, quita 2 incorrectas)
     function usarComodin50() {
         if (comodin50Usado || comodinUsadoEnPreguntaActual) return;
         
         comodin50Usado = true;
-        comodinUsadoEnPreguntaActual = true; // Bloquea el otro comodín para esta pregunta
+        comodinUsadoEnPreguntaActual = true; 
         deshabilitarComodinesPantalla();
 
         let datosPregunta = preguntasSeleccionadas[indicePreguntaActual];
         let correctasEliminadas = 0;
 
-        // Buscaremos botones incorrectos para ocultar
         for (let i = 0; i < 4; i++) {
             let btn = document.getElementById(`btn-opt-${i}`);
             if (btn.dataset.valor !== datosPregunta.c && correctasEliminadas < 2) {
@@ -602,12 +581,11 @@
         }
     }
 
-    // Elimina el 25% de las respuestas incorrectas (es decir, quita 1 incorrecta)
     function usarComodin25() {
         if (comodin25Usado || comodinUsadoEnPreguntaActual) return;
 
         comodin25Usado = true;
-        comodinUsadoEnPreguntaActual = true; // Bloquea el otro comodín para esta pregunta
+        comodinUsadoEnPreguntaActual = true; 
         deshabilitarComodinesPantalla();
 
         let datosPregunta = preguntasSeleccionadas[indicePreguntaActual];
@@ -617,7 +595,7 @@
             if (btn.dataset.valor !== datosPregunta.c) {
                 btn.classList.add("oculto");
                 btn.disabled = true;
-                break; // Solo quitamos una
+                break; 
             }
         }
     }
@@ -630,34 +608,28 @@
 
     // --- VERIFICACIÓN DE RESPUESTA ---
     function verificarRespuesta(indiceBoton) {
-        clearInterval(intervaloPregunta); // Detener reloj momentáneamente
+        clearInterval(intervaloPregunta); 
 
         let btnSeleccionado = document.getElementById(`btn-opt-${indiceBoton}`);
         let respuestaElegida = btnSeleccionado.dataset.valor;
         let datosPregunta = preguntasSeleccionadas[indicePreguntaActual];
 
         if (respuestaElegida === datosPregunta.c) {
-            // ¡ACIERTO!
             totalAciertos++;
             
-            // Sistema de puntos: A mayor rapidez en responder (menos tiempo invertido), más puntos se ganan.
-            // Sumamos una base por dificultad + bonus por segundos sobrantes en la pregunta
-            let multiplicadorDificultad = Math.floor(indicePreguntaActual / 5) + 1; // 1 para fácil, 2 medio, 3 difícil
+            let multiplicadorDificultad = Math.floor(indicePreguntaActual / 5) + 1; 
             let puntosGanados = (100 * multiplicadorDificultad) + tiempoPreguntaRestanteSegundos;
             puntos += puntosGanados;
 
             indicePreguntaActual++;
 
             if (indicePreguntaActual === 15) {
-                // Ha completado las 15 preguntas con éxito
                 clearInterval(intervaloGlobal);
                 finalizarPartida(true, "¡Increíble! Has superado el acoso de Stripe y respondiste todas las preguntas de geometría con éxito.");
             } else {
-                // Siguiente pregunta
                 cargarPregunta();
             }
         } else {
-            // ¡FALLO! En este juego tradicional tipo millonario, un solo error te elimina.
             clearInterval(intervaloGlobal);
             finalizarPartida(false, `¡Respuesta Incorrecta! Stripe se ríe de ti en tu cara. La respuesta correcta era: "${datosPregunta.c}".`);
         }
@@ -669,18 +641,22 @@
 
         let tituloNode = document.getElementById("titulo-resultado");
         let mensajeNode = document.getElementById("mensaje-final");
+        let imagenNode = document.getElementById("imagen-resultado");
 
         if (haGanado) {
             tituloNode.innerText = "¡VICTORIA ABSOLUTA!";
             mensajeNode.className = "resultado-mensaje ganado";
+            // Aquí inyectas la imagen de Victoria
+            imagenNode.innerHTML = "[Espacio para imagen final: Stripe derrotado y el tierno Gizmo celebrando tu victoria]";
         } else {
             tituloNode.innerText = "¡PARTIDA PERDIDA!";
             mensajeNode.className = "resultado-mensaje perdido";
+            // Aquí inyectas la imagen de Derrota
+            imagenNode.innerHTML = "[Espacio para imagen final: Los Gremlins gamberros destrozando el plató y burlándose de ti]";
         }
         
         mensajeNode.innerHTML = mensajeHTML;
 
-        // Calcular tiempos invertidos reales
         let tiempoFinJuego = new Date();
         let diferenciaSegundos = Math.floor((tiempoFinJuego - tiempoInicioJuego) / 1000);
         
@@ -688,7 +664,6 @@
         let segsInvertidos = diferenciaSegundos % 60;
         let tiempoTexto = `${minsInvertidos} min y ${segsInvertidos} seg`;
 
-        // Inyectar estadísticas finales en tabla
         document.getElementById("res-nombre").innerText = nombreJugador;
         document.getElementById("res-aciertos").innerText = `${totalAciertos} / 15`;
         document.getElementById("res-tiempo").innerText = tiempoTexto;
